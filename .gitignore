@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# next.js / build output
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# trigger.dev
+.trigger
+
+# env files (never commit secrets)
+.env
+.env*.local
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+coverage
+.vercel
+.sentryclirc

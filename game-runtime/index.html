@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Playforge</title>
+    <link rel="stylesheet" href="./style.css" />
+    <!--
+      Note for the agent: when you rewrite this file, keep these three things exactly:
+        1. <script src="./report.js"></script> as the FIRST script (it reports errors to the Playforge preview).
+        2. The import map below, unchanged (it maps "three" and "three/addons/" to the CDN).
+        3. A <script type="module" src="./main.js"></script> (instead of welcome.js) as your entry point.
+    -->
+    <script src="./report.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module" src="./welcome.js"></script>
+  </body>
+</html>

@@ -1,0 +1,373 @@
+/* Playforge runtime styles: full-viewport canvas + HUD classes used by engine/hud.js. */
+:root {
+  --pf-font: "Inter", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pf-text: #ffffff;
+  --pf-panel: rgba(12, 16, 32, 0.55);
+  --pf-panel-strong: rgba(12, 16, 32, 0.78);
+  --pf-border: rgba(255, 255, 255, 0.16);
+  --pf-accent: #ffb703;
+  --pf-accent-text: #1b1300;
+  --pf-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+  --pf-gap: clamp(8px, 2vw, 16px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #0b1020;
+  color: var(--pf-text);
+  font-family: var(--pf-font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+body {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The game canvas (createGame adds .pf-canvas; also covers a raw renderer canvas appended to body). */
+body > canvas,
+.pf-canvas {
+  display: block;
+  position: fixed;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+  outline: none;
+}
+
+/* ---- HUD layout ------------------------------------------------------- */
+.pf-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  font-variant-numeric: tabular-nums;
+}
+.pf-zone {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--pf-gap);
+  max-width: 100%;
+}
+.pf-zone-top-left { top: 0; left: 0; align-items: flex-start; }
+.pf-zone-top { top: 0; left: 50%; transform: translateX(-50%); align-items: center; text-align: center; width: max-content; max-width: 100vw; }
+.pf-zone-top-right { top: 0; right: 0; align-items: flex-end; text-align: right; }
+.pf-zone-center { top: 50%; left: 50%; transform: translate(-50%, -50%); align-items: center; text-align: center; width: min(92vw, 720px); }
+.pf-zone-bottom-left { bottom: 0; left: 0; align-items: flex-start; }
+.pf-zone-bottom { bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; text-align: center; width: max-content; max-width: 100vw; }
+.pf-zone-bottom-right { bottom: 0; right: 0; align-items: flex-end; }
+.pf-zone:empty { display: none; }
+
+.pf-stat,
+.pf-bar,
+.pf-text {
+  background: var(--pf-panel);
+  border: 1px solid var(--pf-border);
+  border-radius: 12px;
+  box-shadow: var(--pf-shadow);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.pf-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 14px;
+}
+.pf-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.pf-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+}
+.pf-bar {
+  width: clamp(140px, 28vw, 240px);
+  padding: 6px 10px 8px;
+}
+.pf-bar-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+.pf-bar-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+.pf-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.15s ease-out;
+}
+.pf-text {
+  padding: 8px 14px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.pf-text.pf-plain {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Big centered title (used by the welcome scene; handy for "Level 2" banners). */
+.pf-text.pf-hero {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0;
+  margin-top: clamp(16px, 7vh, 72px);
+}
+.pf-hero h1 {
+  margin: 0;
+  font-size: clamp(28px, 6vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  text-shadow: 0 2px 18px rgba(30, 20, 60, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.pf-hero p {
+  margin: 12px auto 0;
+  max-width: 34em;
+  font-size: clamp(14px, 2.2vw, 18px);
+  line-height: 1.5;
+  opacity: 0.92;
+  text-shadow: 0 1px 8px rgba(30, 20, 60, 0.5);
+}
+
+/* ---- Toasts --------------------------------------------------------------- */
+.pf-toasts {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.pf-toast {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--pf-panel-strong);
+  border: 1px solid var(--pf-border);
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: var(--pf-shadow);
+  animation: pf-pop 0.25s cubic-bezier(0.2, 1.4, 0.4, 1);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.pf-toast.pf-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+@keyframes pf-pop {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---- Screens (start / pause / game over) ---------------------------------- */
+.pf-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: radial-gradient(ellipse at center, rgba(10, 12, 30, 0.45), rgba(5, 6, 18, 0.78));
+  pointer-events: auto;
+  animation: pf-fade 0.25s ease-out;
+}
+.pf-screen.pf-screen-clear {
+  background: none;
+}
+@keyframes pf-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.pf-panel {
+  width: min(92vw, 460px);
+  padding: clamp(20px, 5vw, 36px);
+  border-radius: 20px;
+  background: var(--pf-panel-strong);
+  border: 1px solid var(--pf-border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.pf-title {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.pf-subtitle {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+.pf-body {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+.pf-body kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--pf-border);
+  background: rgba(255, 255, 255, 0.1);
+  font: inherit;
+  font-weight: 700;
+}
+.pf-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 36px;
+  min-height: 48px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--pf-accent-text);
+  background: var(--pf-accent);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25), 0 10px 30px rgba(255, 183, 3, 0.35);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.15s;
+}
+.pf-button:hover { filter: brightness(1.08); }
+.pf-button:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25); }
+.pf-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* ---- Crosshair / minimap / fps ------------------------------------------- */
+.pf-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+}
+.pf-crosshair::before,
+.pf-crosshair::after {
+  content: "";
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  border-radius: 1px;
+}
+.pf-crosshair::before { left: 10px; top: 0; width: 2px; height: 22px; }
+.pf-crosshair::after { top: 10px; left: 0; height: 2px; width: 22px; }
+.pf-minimap {
+  border-radius: 50%;
+  border: 2px solid var(--pf-border);
+  box-shadow: var(--pf-shadow);
+}
+.pf-fps {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 50;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  pointer-events: none;
+}
+
+/* ---- Touch controls ------------------------------------------------------- */
+.pf-touch {
+  position: fixed;
+  inset: auto 0 0 0;
+  height: 0;
+  z-index: 20;
+}
+.pf-joystick {
+  position: fixed;
+  left: max(20px, env(safe-area-inset-left));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  touch-action: none;
+  pointer-events: auto;
+}
+.pf-joystick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+.pf-touch-buttons {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(28px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap-reverse;
+  gap: 14px;
+  max-width: 50vw;
+}
+.pf-touch-button {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font: 700 15px var(--pf-font);
+  touch-action: none;
+  pointer-events: auto;
+}
+.pf-touch-button:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 520px) {
+  .pf-stat-value { font-size: 18px; }
+  .pf-text { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-toast, .pf-screen { animation: none; }
+}
